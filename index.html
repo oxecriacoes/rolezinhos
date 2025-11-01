@@ -660,8 +660,10 @@ function tryToGetUserLocation() {
                 // Manter a visualização padrão
                 L.marker([defaultLat, defaultLng])
                     .addTo(map)
-                    .bindPopup('<b>Local de referência</b><br>12°53\'20.3"S 38°40\'57.6"W')
+                    .bindPopup('<b>Local de referência</b><br>12°53'20.3"S 38°40'57.6"W')
                     .openPopup();
+
+                -12.547762878707792, -38.710176711458665
                 
                 showStatus('Usando localização padrão', 'loading');
                 setTimeout(() => {
