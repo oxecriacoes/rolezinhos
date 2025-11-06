@@ -7,489 +7,497 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
- /* ESTILOS GERAIS OTIMIZADOS PARA MOBILE */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-body {
-    background-color: #f8f9fa;
-    background-image: radial-gradient(#004b8e15 1.5px, transparent 1.5px);
-    background-size: 20px 20px;
-    color: #333;
-    line-height: 1.5;
-    font-size: 14px;
-}
+        body {
+            background-color: #f8f9fa;
+            background-image: radial-gradient(#004b8e15 1.5px, transparent 1.5px);
+            background-size: 20px 20px;
+            color: #333;
+            line-height: 1.5;
+            font-size: 14px;
+        }
 
-.container {
-    max-width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
+        .container {
+            max-width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-/* HEADER COMPACTO PARA MOBILE */
-header {
-    background: linear-gradient(135deg, #4EA2E2 0%, #207dc3 100%);
-    color: white;
-    padding: 0.8rem 1rem;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    flex-shrink: 0;
-}
+        /* HEADER COMPACTO PARA MOBILE */
+        header {
+            background: linear-gradient(135deg, #4EA2E2 0%, #207dc3 100%);
+            color: white;
+            padding: 0.8rem 1rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            flex-shrink: 0;
+        }
 
-h1 {
-    font-size: 1.3rem;
-    margin-bottom: 0.2rem;
-    line-height: 1.2;
-}
+        h1 {
+            font-size: 1.3rem;
+            margin-bottom: 0.2rem;
+            line-height: 1.2;
+        }
 
-.description {
-    font-size: 0.75rem;
-    opacity: 0.9;
-}
+        .description {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
 
-/* MAPA MAIOR EM MOBILE */
-#map {
-    flex: 1;
-    width: 100%;
-    z-index: 100;
-    min-height: 50vh;
-}
+        /* MAPA MAIOR EM MOBILE */
+        #map {
+            flex: 1;
+            width: 100%;
+            z-index: 100;
+            min-height: 50vh;
+        }
 
-/* CONTROLES OTIMIZADOS */
-.controls {
-    padding: 1rem;
-    background-color: white;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    flex-shrink: 0;
-}
+        /* CONTROLES OTIMIZADOS */
+        .controls {
+            padding: 1rem;
+            background-color: white;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            flex-shrink: 0;
+        }
 
-/* BOTÃO MAIOR PARA TOUCH */
-.record-btn {
-    background: linear-gradient(135deg, #4EA2E2 0%, #207dc3 100%);
-    color: white;
-    border: none;
-    padding: 1.1rem;
-    border-radius: 50px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-    min-height: 50px;
-}
+        /* BOTÃO MAIOR PARA TOUCH */
+        .record-btn {
+            background: linear-gradient(135deg, #4EA2E2 0%, #207dc3 100%);
+            color: white;
+            border: none;
+            padding: 1.1rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            min-height: 50px;
+        }
 
-.record-btn:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
-}
+        .record-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
 
-.record-btn.recording {
-    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-    animation: pulse 1.5s infinite;
-}
+        .record-btn.recording {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            animation: pulse 1.5s infinite;
+        }
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.03); }
-    100% { transform: scale(1); }
-}
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
 
-.audio-controls {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
-.audio-player {
-    width: 100%;
-    margin-top: 0.5rem;
-    height: 40px;
-}
+        .audio-player {
+            width: 100%;
+            margin-top: 0.5rem;
+            height: 40px;
+        }
 
-/* MODAL OTIMIZADO PARA MOBILE */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-}
+        /* MODAL OTIMIZADO PARA MOBILE */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
 
-.modal-content {
-    background-color: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    max-height: 90vh;
-    overflow-y: auto;
-}
+        .modal-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
 
-.modal h2 {
-    margin-bottom: 1rem;
-    color: #004b8e;
-    font-size: 1.3rem;
-}
+        .modal h2 {
+            margin-bottom: 1rem;
+            color: #004b8e;
+            font-size: 1.3rem;
+        }
 
-.modal input, .modal textarea {
-    width: 100%;
-    padding: 0.9rem;
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
+        .modal input, .modal textarea {
+            width: 100%;
+            padding: 0.9rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
 
-.modal-buttons {
-    display: flex;
-    gap: 0.8rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
+        .modal-buttons {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
 
-.modal-btn {
-    padding: 0.9rem 1.4rem;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 1rem;
-    min-width: 100px;
-    flex: 1;
-}
+        .modal-btn {
+            padding: 0.9rem 1.4rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            min-width: 100px;
+            flex: 1;
+        }
 
-.btn-cancel {
-    background-color: #f1f1f1;
-    color: #333;
-}
+        .btn-cancel {
+            background-color: #f1f1f1;
+            color: #333;
+        }
 
-.btn-submit {
-    background: linear-gradient(135deg, #004b8e 0%, #00264d 100%);
-    color: white;
-}
+        .btn-submit {
+            background: linear-gradient(135deg, #004b8e 0%, #00264d 100%);
+            color: white;
+        }
 
-/* MARCADORES NO MAPA */
-.custom-marker {
-    background: linear-gradient(135deg, #F1A8C6 0%, #d86f9a 100%);
-    border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    font-size: 12px;
-}
+        /* MARCADORES NO MAPA */
+        .custom-marker {
+            background: linear-gradient(135deg, #F1A8C6 0%, #d86f9a 100%);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            font-size: 12px;
+        }
 
-.marker-pulse {
-    display: block;
-    border-radius: 50%;
-    height: 36px;
-    width: 36px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(241, 168, 198, 0.69);
-    animation: pulsate 2s ease-out infinite;
-    opacity: 0;
-}
+        .marker-pulse {
+            display: block;
+            border-radius: 50%;
+            height: 36px;
+            width: 36px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(241, 168, 198, 0.69);
+            animation: pulsate 2s ease-out infinite;
+            opacity: 0;
+        }
 
-@keyframes pulsate {
-    0% { transform: translate(-50%, -50%) scale(0.1, 0.1); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(1.2, 1.2); opacity: 0; }
-}
+        @keyframes pulsate {
+            0% { transform: translate(-50%, -50%) scale(0.1, 0.1); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.2, 1.2); opacity: 0; }
+        }
 
-.info-window {
-    max-width: 220px;
-}
+        .info-window {
+            max-width: 220px;
+        }
 
-.info-window h3 {
-    margin-bottom: 0.5rem;
-    color: #004b8e;
-    font-size: 1rem;
-}
+        .info-window h3 {
+            margin-bottom: 0.5rem;
+            color: #004b8e;
+            font-size: 1rem;
+        }
 
-.info-window p {
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
-}
+        .info-window p {
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
 
-.info-window audio {
-    width: 100%;
-    margin-top: 0.5rem;
-    height: 36px;
-}
+        .audio-container {
+            position: relative;
+        }
 
-.instructions {
-    background-color: #f8f9fa;
-    padding: 0.8rem;
-    border-radius: 8px;
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
-}
+        audio {
+            width: 100%;
+            margin-top: 0.5rem;
+            height: 36px;
+            border-radius: 20px;
+        }
 
-.instructions h4 {
-    color: #004b8e;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
-}
+        /* Estilo específico para iOS */
+        @supports (-webkit-touch-callout: none) {
+            audio {
+                min-height: 44px;
+            }
+            
+            .record-btn {
+                -webkit-appearance: none;
+                border-radius: 50px;
+            }
+        }
 
-.instructions ol {
-    padding-left: 1.1rem;
-}
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+        }
 
-.instructions li {
-    margin-bottom: 0.3rem;
-    line-height: 1.4;
-}
+        .instructions h4 {
+            color: #004b8e;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
 
-.status-message {
-    padding: 0.7rem;
-    border-radius: 6px;
-    text-align: center;
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-    font-weight: 500;
-}
+        .instructions ol {
+            padding-left: 1.1rem;
+        }
 
-.status-loading {
-    background-color: #e6f0ff;
-    color: #004b8e;
-    border-left: 4px solid #004b8e;
-}
+        .instructions li {
+            margin-bottom: 0.3rem;
+            line-height: 1.4;
+        }
 
-.status-success {
-    background-color: #e6f7ff;
-    color: #0066cc;
-    border-left: 4px solid #0066cc;
-}
+        .status-message {
+            padding: 0.7rem;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
 
-.status-error {
-    background-color: #ffe6e6;
-    color: #cc0000;
-    border-left: 4px solid #cc0000;
-}
+        .status-loading {
+            background-color: #e6f0ff;
+            color: #004b8e;
+            border-left: 4px solid #004b8e;
+        }
 
-/* ÁREA PARA LOGOMARCAS COM LAYOUT ESPECIAL */
-.footer-logos {
-    background-color: #f8f9fa;
-    padding: 1.5rem 1.2rem;
-    text-align: center;
-    border-top: 1px solid #e9ecef;
-    flex-shrink: 0;
-}
+        .status-success {
+            background-color: #e6f7ff;
+            color: #0066cc;
+            border-left: 4px solid #0066cc;
+        }
 
-.logos-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.2rem;
-    max-width: 800px;
-    margin: 0 auto;
-}
+        .status-error {
+            background-color: #ffe6e6;
+            color: #cc0000;
+            border-left: 4px solid #cc0000;
+        }
 
-/* PRIMEIRA LINHA - 3 LOGOS IGUAIS */
-.logo-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    width: 100%;
-}
+        /* ÁREA PARA LOGOMARCAS COM LAYOUT ESPECIAL */
+        .footer-logos {
+            background-color: #f8f9fa;
+            padding: 1.5rem 1.2rem;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+            flex-shrink: 0;
+        }
 
-.logo-item {
-    max-width: 80px;
-    height: auto;
-    opacity: 0.8;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-}
+        .logos-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-.logo-item:hover {
-    opacity: 1;
-    transform: scale(1.05);
-}
+        /* PRIMEIRA LINHA - 3 LOGOS IGUAIS */
+        .logo-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            width: 100%;
+        }
 
-/* SEGUNDA LINHA - LOGO ÚNICA COM MESMA LARGURA DAS 3 JUNTAS */
-.wide-logo-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
+        .logo-item {
+            max-width: 80px;
+            height: auto;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
 
-.wide-logo-item {
-    max-width: calc(3 * 80px + 2 * 1.5rem); /* Largura das 3 logos + espaçamento */
-    height: auto;
-    opacity: 0.8;
-    transition: all 0.3s ease;
-}
+        .logo-item:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
 
-.wide-logo-item:hover {
-    opacity: 1;
-    transform: scale(1.02);
-}
+        /* SEGUNDA LINHA - LOGO ÚNICA COM MESMA LARGURA DAS 3 JUNTAS */
+        .wide-logo-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
 
-/* RESPONSIVIDADE */
-@media (max-width: 768px) {
-    .logos-container {
-        gap: 1rem;
-    }
-    
-    .logo-row {
-        gap: 1.2rem;
-    }
-    
-    .logo-item {
-        max-width: 70px;
-    }
-    
-    .wide-logo-item {
-        max-width: calc(3 * 70px + 2 * 1.2rem); /* Ajuste para mobile */
-    }
-}
+        .wide-logo-item {
+            max-width: calc(3 * 80px + 2 * 1.5rem);
+            height: auto;
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
 
-@media (max-width: 480px) {
-    .footer-logos {
-        padding: 1rem;
-    }
-    
-    .logos-container {
-        gap: 0.8rem;
-    }
-    
-    .logo-row {
-        gap: 1rem;
-    }
-    
-    .logo-item {
-        max-width: 60px;
-    }
-    
-    .wide-logo-item {
-        max-width: calc(3 * 60px + 2 * 1rem); /* Ajuste para mobile pequeno */
-    }
-}
+        .wide-logo-item:hover {
+            opacity: 1;
+            transform: scale(1.02);
+        }
 
-@media (max-width: 380px) {
-    .logo-row {
-        gap: 0.8rem;
-    }
-    
-    .logo-item {
-        max-width: 50px;
-    }
-    
-    .wide-logo-item {
-        max-width: calc(3 * 50px + 2 * 0.8rem); /* Ajuste para telas muito pequenas */
-    }
-}
+        /* BOTÃO DE LOCALIZAÇÃO OTIMIZADO */
+        .leaflet-control-locate {
+            margin-top: 10px !important;
+            margin-right: 10px !important;
+        }
 
-/* Versão alternativa com largura percentual para melhor responsividade */
-@media (max-width: 320px) {
-    .logo-item {
-        max-width: 45px;
-    }
-    
-    .wide-logo-item {
-        max-width: 90%; /* Usa porcentagem em telas muito pequenas */
-        width: 280px; /* Largura mínima */
-    }
-}
+        .leaflet-control-locate a {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 50% !important;
+            background: white !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25) !important;
+            transition: all 0.3s ease;
+        }
 
-/* RESPONSIVIDADE */
-@media (max-width: 768px) {
-    .logo-row {
-        gap: 1.2rem;
-    }
-    
-    .logo-item {
-        width: 70px;
-    }
-    
-    .wide-logo-container {
-        width: calc(3 * 70px + 2 * 1.2rem);
-    }
-}
+        .leaflet-control-locate a:hover {
+            background: #f8f9fa !important;
+            transform: scale(1.1);
+        }
 
-@media (max-width: 480px) {
-    .logo-row {
-        gap: 1rem;
-    }
-    
-    .logo-item {
-        width: 60px;
-    }
-    
-    .wide-logo-container {
-        width: calc(3 * 60px + 2 * 1rem);
-    }
-}
-/* MELHORIAS DE USABILIDADE PARA TOUCH */
-@media (hover: none) and (pointer: coarse) {
-    .record-btn, .modal-btn {
-        min-height: 44px;
-    }
-    
-    .modal input, .modal textarea {
-        font-size: 16px; /* Previne zoom no iOS */
-    }
-}
+        .leaflet-control-locate .fa-location-arrow {
+            color: #004b8e !important;
+            font-size: 18px !important;
+        }
 
-/* PREVENIR ZOOM EM INPUTS NO iOS */
-@media (max-width: 768px) {
-    input, select, textarea {
-        font-size: 16px !important;
-    }
-}
+        /* RESPONSIVIDADE */
+        @media (max-width: 768px) {
+            .logos-container {
+                gap: 1rem;
+            }
+            
+            .logo-row {
+                gap: 1.2rem;
+            }
+            
+            .logo-item {
+                max-width: 70px;
+            }
+            
+            .wide-logo-item {
+                max-width: calc(3 * 70px + 2 * 1.2rem);
+            }
 
-/* AJUSTES ESPECÍFICOS PARA ALTURAS PEQUENAS */
-@media (max-height: 600px) {
-    header {
-        padding: 0.6rem 1rem;
-    }
-    
-    #map {
-        min-height: 45vh;
-    }
-    
-    .instructions {
-        display: none; /* Esconde instruções em telas muito pequenas */
-    }
-}
+            .leaflet-control-locate {
+                margin-top: 8px !important;
+                margin-right: 8px !important;
+            }
+            
+            .leaflet-control-locate a {
+                width: 40px !important;
+                height: 40px !important;
+            }
+            
+            .leaflet-control-locate .fa-location-arrow {
+                font-size: 18px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-logos {
+                padding: 1rem;
+            }
+            
+            .logos-container {
+                gap: 0.8rem;
+            }
+            
+            .logo-row {
+                gap: 1rem;
+            }
+            
+            .logo-item {
+                max-width: 60px;
+            }
+            
+            .wide-logo-item {
+                max-width: calc(3 * 60px + 2 * 1rem);
+            }
+        }
+
+        @media (max-width: 380px) {
+            .logo-row {
+                gap: 0.8rem;
+            }
+            
+            .logo-item {
+                max-width: 50px;
+            }
+            
+            .wide-logo-item {
+                max-width: calc(3 * 50px + 2 * 0.8rem);
+            }
+        }
+
+        /* MELHORIAS PARA COMPATIBILIDADE DE ÁUDIO */
+        .fallback-message {
+            display: none;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .fallback-message a {
+            color: #004b8e;
+            text-decoration: none;
+        }
+
+        .fallback-message a:hover {
+            text-decoration: underline;
+        }
+
+        /* PREVENIR ZOOM EM INPUTS NO iOS */
+        @media (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Mapa sonoro </h1>
-      <h1>  Rolezinhos literários</h1>
-    
+            <h1>Mapa sonoro</h1>
+            <h1>Rolezinhos literários</h1>
             <p class="description">Grave e compartilhe textos em sua cidade</p>
         </header>
         
@@ -517,28 +525,28 @@ h1 {
                 </ol>
             </div>
         </div>
-      <footer class="footer-logos">
-    <div class="logos-container">
-        <!-- Primeira linha - 3 logos -->
-        <div class="logo-row">
-            <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/pnab.png" alt="Logo 1" class="logo-item">
-            <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/ROLEZINHO-COLORIDA-MOLDURA.png" alt="Logo 2" class="logo-item">
-            <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/oxe%20criacoes.png" alt="Logo 3" class="logo-item">
-            
-        </div>
-        
-        <!-- Segunda linha - logo única com mesma largura das 3 juntas -->
-        <div class="wide-logo-row">
-            <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/apoio%20fianceiro.png" alt="Logo Wide" class="wide-logo-item">
-        </div>
-    </div>
-</footer>
+        <footer class="footer-logos">
+            <div class="logos-container">
+                <!-- Primeira linha - 3 logos -->
+                <div class="logo-row">
+                    <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/oxe%20criacoes.png" alt="Logo 1" class="logo-item">
+                    <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/ROLEZINHO-COLORIDA-MOLDURA.png" alt="Logo 2" class="logo-item">
+                    <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/pnab.png" alt="Logo 3" class="logo-item">
+                </div>
+                
+                <!-- Segunda linha - logo única com mesma largura das 3 juntas -->
+                <div class="wide-logo-row">
+                    <!-- Adicione sua logo wide aqui -->
+                    <!-- <https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/apoio%20fianceiro.png" alt="Logo Wide" class="wide-logo-item"> -->
+                </div>
+            </div>
+        </footer>
     </div>
     
     <div id="infoModal" class="modal">
         <div class="modal-content">
             <h2>Adicionar Som ao Mapa</h2>
-            <input type="text" id="soundTitle" placeholder="Título do som (ex: 'Sons do Mercado Modelo')">
+            <input type="text" id="soundTitle" placeholder="Título do som">
             <textarea id="soundDescription" placeholder="Descrição (opcional)" rows="3"></textarea>
             <div class="modal-buttons">
                 <button id="cancelBtn" class="modal-btn btn-cancel">Cancelar</button>
@@ -551,7 +559,7 @@ h1 {
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
-        // Configuração do Supabase (com suas credenciais)
+        // Configuração do Supabase
         const supabaseUrl = 'https://gvjcfiypouudqgsnflil.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2amNmaXlwb3V1ZHFnc25mbGlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc1OTQ4NjEsImV4cCI6MjA3MzE3MDg2MX0.RSR1OELeLdY59a6AAk_idbWS7SgZkvDV9uA7GIB_BQ4';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -563,245 +571,331 @@ h1 {
         let currentRecording = null;
         let currentMarker = null;
         
-        // Coordenadas fornecidas: 
-        const defaultLat = -12.547762878707792;
-        const defaultLng = -38.710176711458665;
-        
-        // Inicialização do mapa
-       // Inicialização do mapa - AGORA COM LOCALIZAÇÃO DO USUÁRIO
-function initMap() {
-    // Primeiro criamos o mapa com visualização padrão (será ajustada depois)
-    map = L.map('map').setView([defaultLat, defaultLng], 14);
-    
-    // Adicionando camada do mapa
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 20
-    }).addTo(map);
-    
-    // Adicionar botão de localização
-    addLocationButton();
-    
-    // Tentar obter a localização do usuário automaticamente
-    tryToGetUserLocation();
-    
-    // Adicionar evento de clique no mapa
-    map.on('click', function(e) {
-        if (currentRecording) {
-            showInfoModal(e.latlng);
-        } else {
-            alert('Grave um áudio primeiro antes de clicar no mapa.');
+        // NOVA COORDENADA DE REFERÊNCIA
+        const defaultLat = -12.54788028372193;
+        const defaultLng = -38.71011234456508;
+
+        // Detectar se é iOS
+        function isIOS() {
+            return [
+                'iPad Simulator',
+                'iPhone Simulator',
+                'iPod Simulator',
+                'iPad',
+                'iPhone',
+                'iPod'
+            ].includes(navigator.platform) ||
+            (navigator.userAgent.includes("Mac") && "ontouchend" in document);
         }
-    });
-    
-    // Carregar sons do Supabase
-    loadSoundsFromDatabase();
-}
 
-// Função para adicionar botão de localização CORRIGIDA
-function addLocationButton() {
-    // Criar botão de localização usando o controle padrão do Leaflet
-    const locateControl = L.control({position: 'topright'});
-    
-    locateControl.onAdd = function(map) {
-        const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-locate');
-        div.innerHTML = '<a href="#" title="Minha localização" style="display: block; border: none; background: white; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-location-arrow" style="color: #004b8e; font-size: 16px;"></i></a>';
-        
-        // Adicionar evento de clique
-        const link = div.querySelector('a');
-        L.DomEvent.on(link, 'click', function(e) {
-            L.DomEvent.stopPropagation(e);
-            L.DomEvent.preventDefault(e);
-            centerMapOnUser();
-        });
-        
-        // Prevenir eventos do mapa quando interagir com o controle
-        L.DomEvent.disableClickPropagation(div);
-        L.DomEvent.disableScrollPropagation(div);
-        
-        return div;
-    };
-    
-    locateControl.addTo(map);
-}
-
-// Função para tentar obter a localização do usuário
-function tryToGetUserLocation() {
-    showStatus('Obtendo sua localização...', 'loading');
-    
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                // Sucesso: centralizar no usuário
-                const userLocation = [
-                    position.coords.latitude,
-                    position.coords.longitude
-                ];
-                
-                // Mover o mapa para a localização do usuário
-                map.setView(userLocation, 16);
-                
-                // Adicionar marcador da localização do usuário
-                L.marker(userLocation)
-                    .addTo(map)
-                    .bindPopup('Sua localização atual')
-                    .openPopup();
-                
-                showStatus('Localização encontrada!', 'success');
-                setTimeout(() => {
-                    document.getElementById('statusMessage').style.display = 'none';
-                }, 2000);
-            },
-            (error) => {
-                // Falha: usar localização padrão
-                console.log("Erro ao obter localização: ", error);
-                
-                // Manter a visualização padrão
-                L.marker([defaultLat, defaultLng])
-                    .addTo(map)
-                    .bindPopup('<b>Local de referência</b><br>12°32\'51.9"S 38°42\'36.6"W')
-                    .openPopup();
-
-                
-
-                -12.547762878707792, -38.710176711458665
-                
-                showStatus('Usando localização padrão', 'loading');
-                setTimeout(() => {
-                    document.getElementById('statusMessage').style.display = 'none';
-                }, 2000);
-            },
-            { 
-                enableHighAccuracy: true, 
-                timeout: 5000, // Tempo menor para não demorar muito
-                maximumAge: 300000 // 5 minutos
+        // Função para determinar o tipo de áudio compatível
+        function getCompatibleAudioType() {
+            const audio = document.createElement('audio');
+            
+            if (audio.canPlayType('audio/mp4')) {
+                return 'audio/mp4';
+            } else if (audio.canPlayType('audio/mpeg')) {
+                return 'audio/mpeg';
+            } else if (audio.canPlayType('audio/webm')) {
+                return 'audio/webm';
+            } else if (audio.canPlayType('audio/wav')) {
+                return 'audio/wav';
+            } else {
+                return 'audio/ogg';
             }
-        );
-    } else {
-        // Navegador não suporta geolocalização
-        showStatus('Geolocalização não suportada. Usando localização padrão.', 'loading');
-        setTimeout(() => {
-            document.getElementById('statusMessage').style.display = 'none';
-        }, 2000);
-        
-        // Usar localização padrão
-        L.marker([defaultLat, defaultLng])
-            .addTo(map)
-            .bindPopup('<b>Local de referência</b><br>12°32\'51.9"S 38°42\'36.6"W')
-            .openPopup();
-    }
-}
+        }
 
-// Função para centralizar no usuário (quando clicar no botão)
-function centerMapOnUser() {
-    if (navigator.geolocation) {
-        showStatus('Obtendo localização...', 'loading');
-        
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const userLocation = [
-                    position.coords.latitude,
-                    position.coords.longitude
-                ];
+        // Função para obter extensão do arquivo
+        function getFileExtension(mimeType) {
+            const extensions = {
+                'audio/mpeg': 'mp3',
+                'audio/mp4': 'm4a',
+                'audio/webm': 'webm',
+                'audio/wav': 'wav',
+                'audio/ogg': 'ogg',
+                'audio/x-m4a': 'm4a'
+            };
+            
+            return extensions[mimeType] || 'mp3';
+        }
+
+        // Função para garantir formato compatível
+        async function ensureCompatibleFormat(blob) {
+            if (blob.type.includes('mpeg') || blob.type.includes('mp4')) {
+                return blob;
+            }
+            
+            try {
+                const audioUrl = URL.createObjectURL(blob);
+                const audio = new Audio();
                 
-                // Mover o mapa para a localização
-                map.setView(userLocation, 16);
-                
-                // Remover marcadores anteriores de localização
-                map.eachLayer(function(layer) {
-                    if (layer instanceof L.Marker && layer.getPopup() && layer.getPopup().getContent().includes('localização atual')) {
-                        map.removeLayer(layer);
-                    }
+                return new Promise((resolve) => {
+                    audio.src = audioUrl;
+                    audio.onloadeddata = () => {
+                        URL.revokeObjectURL(audioUrl);
+                        resolve(blob);
+                    };
+                    
+                    audio.onerror = () => {
+                        URL.revokeObjectURL(audioUrl);
+                        console.warn("Formato de áudio pode ter problemas de compatibilidade:", blob.type);
+                        resolve(blob);
+                    };
+                    
+                    setTimeout(() => {
+                        URL.revokeObjectURL(audioUrl);
+                        resolve(blob);
+                    }, 2000);
                 });
                 
-                // Adicionar novo marcador
-                L.marker(userLocation)
-                    .addTo(map)
-                    .bindPopup('Sua localização atual')
-                    .openPopup();
+            } catch (error) {
+                console.warn("Erro na verificação de formato:", error);
+                return blob;
+            }
+        }
+
+        // Inicialização do mapa
+        function initMap() {
+            map = L.map('map').setView([defaultLat, defaultLng], 14);
+            
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(map);
+            
+            addLocationButton();
+            tryToGetUserLocation();
+            
+            map.on('click', function(e) {
+                if (currentRecording) {
+                    showInfoModal(e.latlng);
+                } else {
+                    alert('Grave um áudio primeiro antes de clicar no mapa.');
+                }
+            });
+            
+            loadSoundsFromDatabase();
+        }
+
+        // Função para adicionar botão de localização
+        function addLocationButton() {
+            const locateControl = L.control({position: 'topright'});
+            
+            locateControl.onAdd = function(map) {
+                const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-locate');
+                div.innerHTML = '<a href="#" title="Minha localização" style="display: block; border: none; background: white; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-location-arrow" style="color: #004b8e; font-size: 16px;"></i></a>';
                 
-                showStatus('Localização encontrada!', 'success');
+                const link = div.querySelector('a');
+                L.DomEvent.on(link, 'click', function(e) {
+                    L.DomEvent.stopPropagation(e);
+                    L.DomEvent.preventDefault(e);
+                    centerMapOnUser();
+                });
+                
+                L.DomEvent.disableClickPropagation(div);
+                L.DomEvent.disableScrollPropagation(div);
+                
+                return div;
+            };
+            
+            locateControl.addTo(map);
+        }
+
+        // Função para tentar obter a localização do usuário
+        function tryToGetUserLocation() {
+            showStatus('Obtendo sua localização...', 'loading');
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLocation = [
+                            position.coords.latitude,
+                            position.coords.longitude
+                        ];
+                        
+                        map.setView(userLocation, 16);
+                        
+                        L.marker(userLocation)
+                            .addTo(map)
+                            .bindPopup('Sua localização atual')
+                            .openPopup();
+                        
+                        showStatus('Localização encontrada!', 'success');
+                        setTimeout(() => {
+                            document.getElementById('statusMessage').style.display = 'none';
+                        }, 2000);
+                    },
+                    (error) => {
+                        console.log("Erro ao obter localização: ", error);
+                        
+                        L.marker([defaultLat, defaultLng])
+                            .addTo(map)
+                            .bindPopup('<b>Local de referência</b>')
+                            .openPopup();
+                        
+                        showStatus('Usando localização padrão', 'loading');
+                        setTimeout(() => {
+                            document.getElementById('statusMessage').style.display = 'none';
+                        }, 2000);
+                    },
+                    { 
+                        enableHighAccuracy: true, 
+                        timeout: 5000,
+                        maximumAge: 300000
+                    }
+                );
+            } else {
+                showStatus('Geolocalização não suportada. Usando localização padrão.', 'loading');
                 setTimeout(() => {
                     document.getElementById('statusMessage').style.display = 'none';
                 }, 2000);
-            },
-            (error) => {
-                console.error("Erro ao obter localização: ", error);
-                let errorMessage = "Não foi possível obter a localização. ";
                 
-                switch(error.code) {
-                    case error.PERMISSION_DENIED:
-                        errorMessage += "Permissão negada.";
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        errorMessage += "Localização indisponível.";
-                        break;
-                    case error.TIMEOUT:
-                        errorMessage += "Tempo de espera excedido.";
-                        break;
-                    default:
-                        errorMessage += "Erro desconhecido.";
-                }
-                
-                showStatus(errorMessage, 'error');
-            },
-            { 
-                enableHighAccuracy: true, 
-                timeout: 10000,
-                maximumAge: 60000
+                L.marker([defaultLat, defaultLng])
+                    .addTo(map)
+                    .bindPopup('<b>Local de referência</b>')
+                    .openPopup();
             }
-        );
-    } else {
-        showStatus('Geolocalização não é suportada pelo seu navegador', 'error');
-    }
-}
+        }
+
+        // Função para centralizar no usuário
+        function centerMapOnUser() {
+            if (navigator.geolocation) {
+                showStatus('Obtendo localização...', 'loading');
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLocation = [
+                            position.coords.latitude,
+                            position.coords.longitude
+                        ];
+                        
+                        map.setView(userLocation, 16);
+                        
+                        map.eachLayer(function(layer) {
+                            if (layer instanceof L.Marker && layer.getPopup() && layer.getPopup().getContent().includes('localização atual')) {
+                                map.removeLayer(layer);
+                            }
+                        });
+                        
+                        L.marker(userLocation)
+                            .addTo(map)
+                            .bindPopup('Sua localização atual')
+                            .openPopup();
+                        
+                        showStatus('Localização encontrada!', 'success');
+                        setTimeout(() => {
+                            document.getElementById('statusMessage').style.display = 'none';
+                        }, 2000);
+                    },
+                    (error) => {
+                        console.error("Erro ao obter localização: ", error);
+                        let errorMessage = "Não foi possível obter a localização. ";
+                        
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMessage += "Permissão negada.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMessage += "Localização indisponível.";
+                                break;
+                            case error.TIMEOUT:
+                                errorMessage += "Tempo de espera excedido.";
+                                break;
+                            default:
+                                errorMessage += "Erro desconhecido.";
+                        }
+                        
+                        showStatus(errorMessage, 'error');
+                    },
+                    { 
+                        enableHighAccuracy: true, 
+                        timeout: 10000,
+                        maximumAge: 60000
+                    }
+                );
+            } else {
+                showStatus('Geolocalização não é suportada pelo seu navegador', 'error');
+            }
+        }
         
-        // Inicializar gravador de áudio
+        // Inicializar gravador de áudio - VERSÃO COMPATÍVEL COM iOS
         async function initAudioRecorder() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                audioRecorder = new MediaRecorder(stream);
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        channelCount: 1,
+                        sampleRate: 44100,
+                        bitrate: 128000
+                    } 
+                });
                 
-                audioRecorder.ondataavailable = (event) => {
-                    audioChunks.push(event.data);
+                const options = {
+                    mimeType: 'audio/webm;codecs=opus',
+                    audioBitsPerSecond: 128000
                 };
                 
-                audioRecorder.onstop = () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
-                    currentRecording = URL.createObjectURL(audioBlob);
-                    
-                    // Mostrar controles de áudio
-                    document.getElementById('audioControls').style.display = 'block';
-                    document.getElementById('audioPlayback').src = currentRecording;
-                    
-                    // Alterar texto do botão
-                    document.getElementById('recordBtn').innerHTML = '<i class="fas fa-microphone"></i><span>Gravar Novamente</span>';
-                    
-                    // Instruir o usuário
-                    alert('Gravação concluída! Agora clique no mapa para escolher a localização.');
+                if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+                    audioRecorder = new MediaRecorder(stream, options);
+                } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                    audioRecorder = new MediaRecorder(stream, { mimeType: 'audio/mp4' });
+                } else {
+                    audioRecorder = new MediaRecorder(stream);
+                }
+                
+                audioRecorder.ondataavailable = (event) => {
+                    if (event.data && event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
+                
+                audioRecorder.onstop = async () => {
+                    try {
+                        const audioBlob = new Blob(audioChunks, { 
+                            type: getCompatibleAudioType() 
+                        });
+                        currentRecording = URL.createObjectURL(audioBlob);
+                        
+                        document.getElementById('audioControls').style.display = 'block';
+                        const audioElement = document.getElementById('audioPlayback');
+                        audioElement.src = currentRecording;
+                        
+                        audioElement.load();
+                        
+                        document.getElementById('recordBtn').innerHTML = '<i class="fas fa-microphone"></i><span>Gravar Novamente</span>';
+                        
+                        alert('Gravação concluída! Agora clique no mapa para escolher a localização.');
+                        
+                    } catch (error) {
+                        console.error("Erro ao processar gravação:", error);
+                        alert('Erro ao processar a gravação. Tente novamente.');
+                    }
                 };
                 
             } catch (error) {
                 console.error("Erro ao acessar microfone: ", error);
-                alert("Não foi possível acessar o microfone. Verifique as permissões do navegador.");
+                
+                if (error.name === 'NotAllowedError') {
+                    alert("Permissão de microfone negada. Por favor, permita o acesso ao microfone nas configurações do seu navegador.");
+                } else if (error.name === 'NotFoundError') {
+                    alert("Nenhum microfone encontrado. Verifique se seu dispositivo tem um microfone disponível.");
+                } else {
+                    alert("Não foi possível acessar o microfone. Verifique as permissões do navegador.");
+                }
             }
         }
         
         // Alternar gravação
         function toggleRecording() {
             if (audioRecorder && audioRecorder.state === 'recording') {
-                // Parar gravação
                 audioRecorder.stop();
                 document.getElementById('recordBtn').classList.remove('recording');
             } else {
-                // Iniciar nova gravação
                 audioChunks = [];
                 audioRecorder.start();
                 document.getElementById('recordBtn').classList.add('recording');
                 document.getElementById('recordBtn').innerHTML = '<i class="fas fa-stop-circle"></i><span>Parar Gravação</span>';
                 
-                // Esconder controles de áudio anteriores
                 document.getElementById('audioControls').style.display = 'none';
                 currentRecording = null;
             }
@@ -818,7 +912,6 @@ function centerMapOnUser() {
             document.getElementById('soundDescription').value = '';
             document.getElementById('infoModal').style.display = 'flex';
             
-            // Configurar botões do modal
             document.getElementById('cancelBtn').onclick = () => {
                 document.getElementById('infoModal').style.display = 'none';
             };
@@ -832,11 +925,9 @@ function centerMapOnUser() {
                 
                 const description = document.getElementById('soundDescription').value.trim();
                 
-                // Mostrar indicador de carregamento
                 document.getElementById('submitBtn').innerHTML = 'Enviando...';
                 document.getElementById('submitBtn').disabled = true;
                 
-                // Salvar no Supabase
                 const success = await saveSoundToDatabase({
                     lat: latlng.lat,
                     lng: latlng.lng,
@@ -846,26 +937,23 @@ function centerMapOnUser() {
                 });
                 
                 if (success) {
-                    // Fechar modal e resetar gravação
                     document.getElementById('infoModal').style.display = 'none';
                     currentRecording = null;
                     document.getElementById('audioControls').style.display = 'none';
                     document.getElementById('recordBtn').innerHTML = '<i class="fas fa-microphone"></i><span>Gravar Áudio</span>';
                     
-                    showStatus('Som adicionado ao mapa com sucesso!', 'success');
+                    showStatus('Áudio adicionado com sucesso!', 'success');
                 } else {
-                    showStatus('Erro ao salvar o som. Tente novamente.', 'error');
+                    showStatus('Erro ao salvar o áudio. Tente novamente.', 'error');
                 }
                 
-                // Restaurar botão
                 document.getElementById('submitBtn').innerHTML = 'Enviar';
                 document.getElementById('submitBtn').disabled = false;
             };
         }
         
-        // Adicionar som ao mapa
+        // Adicionar som ao mapa - VERSÃO COMPATÍVEL
         function addSoundToMap(sound) {
-            // Criar marcador personalizado
             const customIcon = L.divIcon({
                 className: 'custom-marker-container',
                 html: `
@@ -878,52 +966,74 @@ function centerMapOnUser() {
                 iconAnchor: [15, 15]
             });
             
-            // Adicionar marcador ao mapa
             const marker = L.marker([sound.lat, sound.lng], { icon: customIcon }).addTo(map);
             
-            // Criar popup com informações do áudio
             const popupContent = `
                 <div class="info-window">
                     <h3>${sound.title}</h3>
                     <p>${sound.description || 'Sem descrição'}</p>
-                    <audio controls>
-                        <source src="${sound.audio_url}" type="audio/mpeg">
-                        Seu navegador não suporta o elemento de áudio.
-                    </audio>
+                    <div class="audio-container">
+                        <audio controls controlsList="nodownload" style="width: 100%;">
+                            <source src="${sound.audio_url}" type="audio/mpeg">
+                            <source src="${sound.audio_url}" type="audio/mp4">
+                            <source src="${sound.audio_url}" type="audio/webm">
+                            Seu navegador não suporta o elemento de áudio.
+                        </audio>
+                        <div class="fallback-message">
+                            Problema com áudio? <a href="${sound.audio_url}" target="_blank" download>Clique para baixar</a>
+                        </div>
+                    </div>
                 </div>
             `;
             
             marker.bindPopup(popupContent);
+            
+            marker.on('popupopen', function() {
+                setTimeout(() => {
+                    const audioElement = marker.getPopup().getContent().querySelector('audio');
+                    if (audioElement) {
+                        audioElement.addEventListener('error', function() {
+                            const fallback = marker.getPopup().getContent().querySelector('.fallback-message');
+                            if (fallback) {
+                                fallback.style.display = 'block';
+                            }
+                        });
+                        
+                        audioElement.load();
+                    }
+                }, 100);
+            });
         }
         
-        // Função para salvar um som no Supabase
+        // Função para salvar um som no Supabase - VERSÃO COMPATÍVEL
         async function saveSoundToDatabase(soundData) {
             try {
                 console.log("Iniciando upload do áudio...");
-                showStatus('Fazendo upload do áudio...', 'loading');
+                showStatus('Processando áudio...', 'loading');
                 
-                // 1. Converter a URL temporária em Blob
                 const response = await fetch(soundData.audio);
-                const audioBlob = await response.blob();
+                let audioBlob = await response.blob();
                 
-                // 2. Criar um nome único para o arquivo
+                audioBlob = await ensureCompatibleFormat(audioBlob);
+                
                 const timestamp = new Date().getTime();
-                const fileName = `audio_${timestamp}.mp3`;
+                const fileName = `audio_${timestamp}.${getFileExtension(audioBlob.type)}`;
                 
-                // 3. Fazer upload do áudio para o Supabase Storage
                 const { data: uploadData, error: uploadError } = await supabase.storage
                     .from('sounds')
-                    .upload(fileName, audioBlob);
+                    .upload(fileName, audioBlob, {
+                        contentType: audioBlob.type,
+                        upsert: false
+                    });
                 
                 if (uploadError) {
                     console.error("Erro no upload do áudio:", uploadError);
-                    showStatus('Erro no upload do áudio. Verifique as políticas do Storage.', 'error');
+                    showStatus('Erro no upload do áudio. Tente novamente.', 'error');
                     return false;
                 }
                 
                 console.log("Áudio uploadado com sucesso:", uploadData);
                 
-                // 4. Obter URL pública do áudio
                 const { data: urlData } = supabase.storage
                     .from('sounds')
                     .getPublicUrl(fileName);
@@ -931,7 +1041,6 @@ function centerMapOnUser() {
                 const publicUrl = urlData.publicUrl;
                 console.log("URL pública do áudio:", publicUrl);
                 
-                // 5. Salvar metadados no Supabase
                 showStatus('Salvando informações...', 'loading');
                 const { data, error } = await supabase
                     .from('sounds')
@@ -942,6 +1051,7 @@ function centerMapOnUser() {
                             lat: soundData.lat,
                             lng: soundData.lng,
                             audio_url: publicUrl,
+                            audio_format: audioBlob.type,
                             created_at: new Date().toISOString()
                         }
                     ])
@@ -949,20 +1059,12 @@ function centerMapOnUser() {
                 
                 if (error) {
                     console.error("Erro ao salvar metadados:", error);
-                    
-                    // Mensagem de erro mais específica
-                    if (error.code === '42501') {
-                        showStatus('Erro de permissão. Verifique as políticas da tabela sounds.', 'error');
-                    } else {
-                        showStatus('Erro ao salvar informações: ' + error.message, 'error');
-                    }
-                    
+                    showStatus('Erro ao salvar informações. Tente novamente.', 'error');
                     return false;
                 }
                 
                 console.log("Metadados salvos com sucesso:", data);
                 
-                // 6. Adicionar ao mapa
                 addSoundToMap({
                     lat: soundData.lat,
                     lng: soundData.lng,
@@ -971,11 +1073,12 @@ function centerMapOnUser() {
                     audio_url: publicUrl
                 });
                 
-                showStatus('Som adicionado com sucesso!', 'success');
+                showStatus('Áudio adicionado com sucesso!', 'success');
                 return true;
+                
             } catch (error) {
                 console.error("Erro ao salvar som: ", error);
-                showStatus('Erro inesperado: ' + error.message, 'error');
+                showStatus('Erro inesperado. Tente novamente.', 'error');
                 return false;
             }
         }
@@ -1012,13 +1115,11 @@ function centerMapOnUser() {
             try {
                 showStatus('Testando conexão...', 'loading');
                 
-                // Testar conexão com a tabela
                 const { data: tableData, error: tableError } = await supabase
                     .from('sounds')
                     .select('count')
                     .limit(1);
                 
-                // Testar conexão com o storage
                 const { data: storageData, error: storageError } = await supabase.storage
                     .from('sounds')
                     .list();
@@ -1071,10 +1172,8 @@ function centerMapOnUser() {
             initAudioRecorder();
             testSupabaseConnection();
             
-            // Configurar botão de gravação
             document.getElementById('recordBtn').addEventListener('click', toggleRecording);
             
-            // Configurar botão de cancelamento do modal com clique fora
             document.getElementById('infoModal').addEventListener('click', (e) => {
                 if (e.target === document.getElementById('infoModal')) {
                     document.getElementById('infoModal').style.display = 'none';
