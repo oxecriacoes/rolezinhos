@@ -30,7 +30,6 @@
             flex-direction: column;
         }
 
-        /* HEADER COMPACTO PARA MOBILE */
         header {
             background: linear-gradient(135deg, #4EA2E2 0%, #207dc3 100%);
             color: white;
@@ -52,7 +51,6 @@
             opacity: 0.9;
         }
 
-        /* MAPA MAIOR EM MOBILE */
         #map {
             flex: 1;
             width: 100%;
@@ -60,7 +58,6 @@
             min-height: 50vh;
         }
 
-        /* CONTROLES OTIMIZADOS */
         .controls {
             padding: 1rem;
             background-color: white;
@@ -71,7 +68,6 @@
             flex-shrink: 0;
         }
 
-        /* BOTÃO MAIOR PARA TOUCH */
         .record-btn {
             background: linear-gradient(135deg, #4EA2E2 0%, #207dc3 100%);
             color: white;
@@ -117,7 +113,6 @@
             height: 40px;
         }
 
-        /* MODAL OTIMIZADO PARA MOBILE */
         .modal {
             display: none;
             position: fixed;
@@ -187,7 +182,6 @@
             color: white;
         }
 
-        /* MARCADORES NO MAPA */
         .custom-marker {
             background: linear-gradient(135deg, #F1A8C6 0%, #d86f9a 100%);
             border-radius: 50%;
@@ -248,7 +242,6 @@
             border-radius: 20px;
         }
 
-        /* Estilo específico para iOS */
         @supports (-webkit-touch-callout: none) {
             audio {
                 min-height: 44px;
@@ -310,7 +303,6 @@
             border-left: 4px solid #cc0000;
         }
 
-        /* ÁREA PARA LOGOMARCAS COM LAYOUT ESPECIAL */
         .footer-logos {
             background-color: #f8f9fa;
             padding: 1.5rem 1.2rem;
@@ -328,7 +320,6 @@
             margin: 0 auto;
         }
 
-        /* PRIMEIRA LINHA - 3 LOGOS IGUAIS */
         .logo-row {
             display: flex;
             justify-content: center;
@@ -351,7 +342,6 @@
             transform: scale(1.05);
         }
 
-        /* SEGUNDA LINHA - LOGO ÚNICA COM MESMA LARGURA DAS 3 JUNTAS */
         .wide-logo-row {
             display: flex;
             justify-content: center;
@@ -371,7 +361,6 @@
             transform: scale(1.02);
         }
 
-        /* BOTÃO DE LOCALIZAÇÃO OTIMIZADO */
         .leaflet-control-locate {
             margin-top: 10px !important;
             margin-right: 10px !important;
@@ -399,7 +388,6 @@
             font-size: 18px !important;
         }
 
-        /* RESPONSIVIDADE */
         @media (max-width: 768px) {
             .logos-container {
                 gap: 1rem;
@@ -468,7 +456,6 @@
             }
         }
 
-        /* MELHORIAS PARA COMPATIBILIDADE DE ÁUDIO */
         .fallback-message {
             display: none;
             font-size: 12px;
@@ -485,7 +472,6 @@
             text-decoration: underline;
         }
 
-        /* PREVENIR ZOOM EM INPUTS NO iOS */
         @media (max-width: 768px) {
             input, select, textarea {
                 font-size: 16px !important;
@@ -527,14 +513,12 @@
         </div>
         <footer class="footer-logos">
             <div class="logos-container">
-                <!-- Primeira linha - 3 logos -->
                 <div class="logo-row">
                     <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/oxe%20criacoes.png" alt="Logo 1" class="logo-item">
                     <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/ROLEZINHO-COLORIDA-MOLDURA.png" alt="Logo 2" class="logo-item">
                     <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/pnab.png" alt="Logo 3" class="logo-item">
                 </div>
                 
-                <!-- Segunda linha - logo única com mesma largura das 3 juntas -->
                 <div class="wide-logo-row">
                     <img src="https://gvjcfiypouudqgsnflil.supabase.co/storage/v1/object/public/sounds/apoio%20fianceiro.png" alt="Apoio Financeiro" class="wide-logo-item">
                 </div>
@@ -568,9 +552,9 @@
         let audioRecorder;
         let audioChunks = [];
         let currentRecording = null;
-        let currentMarker = null;
+        let recordedBlob = null;
         
-        // NOVA COORDENADA DE REFERÊNCIA
+        // Coordenada de referência
         const defaultLat = -12.54788028372193;
         const defaultLng = -38.71011234456508;
 
@@ -593,7 +577,7 @@
             tryToGetUserLocation();
             
             map.on('click', function(e) {
-                if (currentRecording) {
+                if (recordedBlob) {
                     showInfoModal(e.latlng);
                 } else {
                     alert('Grave um áudio primeiro antes de clicar no mapa.');
@@ -744,24 +728,7 @@
             }
         }
         
-        // Função para tratar erros do microfone
-        function handleMicrophoneError(error) {
-            let errorMessage = "Não foi possível acessar o microfone. ";
-            
-            if (error.name === 'NotAllowedError') {
-                errorMessage += "Permissão negada. Por favor, permita o acesso ao microfone nas configurações do seu navegador.";
-            } else if (error.name === 'NotFoundError') {
-                errorMessage += "Nenhum microfone encontrado. Verifique se seu dispositivo tem um microfone disponível.";
-            } else if (error.name === 'NotSupportedError') {
-                errorMessage += "Gravação de áudio não é suportada neste navegador. Tente usar Chrome, Firefox ou Safari atualizado.";
-            } else {
-                errorMessage += "Erro: " + error.message;
-            }
-            
-            showStatus(errorMessage, 'error');
-        }
-        
-        // Inicializar gravador de áudio - VERSÃO COMPATÍVEL COM APPLE
+        // Inicializar gravador de áudio
         async function initAudioRecorder() {
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -773,7 +740,7 @@
                     } 
                 });
                 
-                // Configurações compatíveis para diferentes navegadores
+                // Configurações compatíveis
                 let options = {};
                 const mimeTypes = [
                     'audio/webm;codecs=opus',
@@ -791,46 +758,34 @@
                     }
                 }
                 
-                // Se nenhum tipo específico for suportado, usar o padrão
                 audioRecorder = new MediaRecorder(stream, options);
                 
                 audioRecorder.ondataavailable = (event) => {
                     if (event.data && event.data.size > 0) {
                         audioChunks.push(event.data);
-                        console.log("Dados de áudio recebidos:", event.data.size, "bytes");
                     }
                 };
                 
                 audioRecorder.onstop = async () => {
                     try {
-                        console.log("Parando gravação, chunks:", audioChunks.length);
-                        
                         if (audioChunks.length === 0) {
                             throw new Error("Nenhum dado de áudio foi capturado");
                         }
                         
-                        // Criar Blob para preview
-                        const audioBlob = new Blob(audioChunks, { 
+                        // Criar Blob para preview e salvamento
+                        recordedBlob = new Blob(audioChunks, { 
                             type: audioRecorder.mimeType || 'audio/webm' 
                         });
                         
-                        console.log("Blob criado para preview:", audioBlob.size, "bytes");
-                        
-                        if (audioBlob.size === 0) {
+                        if (recordedBlob.size === 0) {
                             throw new Error("Blob de áudio está vazio");
                         }
                         
-                        currentRecording = URL.createObjectURL(audioBlob);
+                        currentRecording = URL.createObjectURL(recordedBlob);
                         
                         document.getElementById('audioControls').style.display = 'block';
                         const audioElement = document.getElementById('audioPlayback');
                         audioElement.src = currentRecording;
-                        
-                        audioElement.onerror = function() {
-                            console.error("Erro ao carregar áudio para preview");
-                            showStatus('Erro ao carregar prévia do áudio. O áudio ainda será salvo.', 'error');
-                        };
-                        
                         audioElement.load();
                         
                         document.getElementById('recordBtn').innerHTML = '<i class="fas fa-microphone"></i><span>Gravar Novamente</span>';
@@ -855,12 +810,25 @@
                 
             } catch (error) {
                 console.error("Erro ao acessar microfone: ", error);
-                handleMicrophoneError(error);
+                let errorMessage = "Não foi possível acessar o microfone. ";
+                
+                if (error.name === 'NotAllowedError') {
+                    errorMessage += "Permissão negada. Por favor, permita o acesso ao microfone.";
+                } else if (error.name === 'NotFoundError') {
+                    errorMessage += "Nenhum microfone encontrado.";
+                } else if (error.name === 'NotSupportedError') {
+                    errorMessage += "Gravação de áudio não é suportada neste navegador.";
+                } else {
+                    errorMessage += "Erro: " + error.message;
+                }
+                
+                showStatus(errorMessage, 'error');
             }
         }
 
         function resetRecordingState() {
             audioChunks = [];
+            recordedBlob = null;
             currentRecording = null;
             document.getElementById('recordBtn').classList.remove('recording');
             document.getElementById('recordBtn').innerHTML = '<i class="fas fa-microphone"></i><span>Gravar Áudio</span>';
@@ -874,18 +842,21 @@
                 document.getElementById('recordBtn').classList.remove('recording');
             } else {
                 audioChunks = [];
+                recordedBlob = null;
                 audioRecorder.start();
                 document.getElementById('recordBtn').classList.add('recording');
                 document.getElementById('recordBtn').innerHTML = '<i class="fas fa-stop-circle"></i><span>Parar Gravação</span>';
                 
                 document.getElementById('audioControls').style.display = 'none';
                 currentRecording = null;
+                
+                showStatus('Gravando... Clique novamente para parar.', 'loading');
             }
         }
         
         // Mostrar modal de informações
         function showInfoModal(latlng) {
-            if (!currentRecording) {
+            if (!recordedBlob) {
                 alert('Grave um áudio primeiro antes de adicionar ao mapa.');
                 return;
             }
@@ -914,17 +885,16 @@
                     lat: latlng.lat,
                     lng: latlng.lng,
                     title: title,
-                    description: description,
-                    audio: currentRecording
+                    description: description
                 });
                 
                 if (success) {
                     document.getElementById('infoModal').style.display = 'none';
-                    currentRecording = null;
-                    document.getElementById('audioControls').style.display = 'none';
-                    document.getElementById('recordBtn').innerHTML = '<i class="fas fa-microphone"></i><span>Gravar Áudio</span>';
-                    
+                    resetRecordingState();
                     showStatus('Áudio adicionado com sucesso!', 'success');
+                    setTimeout(() => {
+                        document.getElementById('statusMessage').style.display = 'none';
+                    }, 3000);
                 } else {
                     showStatus('Erro ao salvar o áudio. Tente novamente.', 'error');
                 }
@@ -934,7 +904,7 @@
             };
         }
         
-        // Adicionar som ao mapa - VERSÃO COMPATÍVEL
+        // Adicionar som ao mapa
         function addSoundToMap(sound) {
             const customIcon = L.divIcon({
                 className: 'custom-marker-container',
@@ -970,105 +940,47 @@
             `;
             
             marker.bindPopup(popupContent);
-            
-            marker.on('popupopen', function() {
-                setTimeout(() => {
-                    const audioElement = marker.getPopup().getContent().querySelector('audio');
-                    if (audioElement) {
-                        audioElement.addEventListener('error', function() {
-                            const fallback = marker.getPopup().getContent().querySelector('.fallback-message');
-                            if (fallback) {
-                                fallback.style.display = 'block';
-                            }
-                        });
-                        
-                        audioElement.load();
-                    }
-                }, 100);
-            });
         }
         
-        // Função para salvar um som no Supabase - VERSÃO CORRIGIDA
+        // Função para salvar um som no Supabase - VERSÃO SIMPLIFICADA
         async function saveSoundToDatabase(soundData) {
             try {
                 console.log("Iniciando upload do áudio...");
-                showStatus('Processando áudio...', 'loading');
+                showStatus('Fazendo upload do áudio...', 'loading');
                 
-                // 1. Obter o Blob diretamente dos chunks de áudio gravados
-                let audioBlob;
-                
-                if (audioChunks && audioChunks.length > 0) {
-                    // Usar os chunks diretamente da gravação
-                    const blobType = isAppleDevice() ? 'audio/mp4' : 'audio/webm';
-                    audioBlob = new Blob(audioChunks, { type: blobType });
-                } else if (soundData.audio) {
-                    // Fallback: tentar converter a URL (menos confiável)
-                    console.warn("Usando fallback de URL - pode não funcionar em todos os navegadores");
-                    const response = await fetch(soundData.audio);
-                    if (!response.ok) {
-                        throw new Error(`Falha ao buscar áudio: ${response.status}`);
-                    }
-                    audioBlob = await response.blob();
-                } else {
-                    throw new Error("Nenhum dado de áudio disponível");
+                if (!recordedBlob) {
+                    throw new Error("Nenhum áudio gravado encontrado");
                 }
                 
-                console.log("Blob obtido:", audioBlob.size, "bytes, tipo:", audioBlob.type);
-                
-                if (audioBlob.size === 0) {
-                    throw new Error("Arquivo de áudio está vazio");
-                }
-                
-                // 2. Criar um nome único para o arquivo
+                // Criar um nome único para o arquivo
                 const timestamp = new Date().getTime();
                 const randomId = Math.random().toString(36).substring(2, 9);
                 
-                // Determinar extensão baseada no tipo MIME
-                let fileExtension = 'mp3';
-                if (audioBlob.type.includes('mp4') || audioBlob.type.includes('m4a')) {
+                // Determinar extensão
+                let fileExtension = 'webm';
+                if (recordedBlob.type.includes('mp4') || recordedBlob.type.includes('m4a')) {
                     fileExtension = 'm4a';
-                } else if (audioBlob.type.includes('webm')) {
-                    fileExtension = 'webm';
-                } else if (audioBlob.type.includes('wav')) {
+                } else if (recordedBlob.type.includes('wav')) {
                     fileExtension = 'wav';
                 }
                 
                 const fileName = `audio_${timestamp}_${randomId}.${fileExtension}`;
                 
-                console.log("Fazendo upload do arquivo:", fileName, "Tipo:", audioBlob.type);
+                console.log("Fazendo upload do arquivo:", fileName);
                 
-                // 3. Fazer upload do áudio para o Supabase Storage
+                // Fazer upload do áudio para o Supabase Storage
                 const { data: uploadData, error: uploadError } = await supabase.storage
                     .from('sounds')
-                    .upload(fileName, audioBlob, {
-                        contentType: audioBlob.type,
-                        upsert: false
-                    });
+                    .upload(fileName, recordedBlob);
                 
                 if (uploadError) {
                     console.error("Erro no upload do áudio:", uploadError);
-                    
-                    // Tentar com tipo MIME mais genérico em caso de erro
-                    if (uploadError.message.includes('content-type')) {
-                        console.log("Tentando upload com tipo MIME alternativo...");
-                        const { data: retryData, error: retryError } = await supabase.storage
-                            .from('sounds')
-                            .upload(fileName, audioBlob, {
-                                contentType: 'audio/mpeg',
-                                upsert: false
-                            });
-                        
-                        if (retryError) {
-                            throw new Error(`Upload falhou: ${retryError.message}`);
-                        }
-                    } else {
-                        throw new Error(`Upload falhou: ${uploadError.message}`);
-                    }
+                    throw new Error(`Upload falhou: ${uploadError.message}`);
                 }
                 
                 console.log("Áudio uploadado com sucesso");
                 
-                // 4. Obter URL pública do áudio
+                // Obter URL pública do áudio
                 const { data: urlData } = supabase.storage
                     .from('sounds')
                     .getPublicUrl(fileName);
@@ -1076,38 +988,65 @@
                 const publicUrl = urlData.publicUrl;
                 console.log("URL pública do áudio:", publicUrl);
                 
-                // 5. Salvar metadados no Supabase
+                // Salvar metadados no Supabase - APENAS COLUNAS EXISTENTES
                 showStatus('Salvando informações...', 'loading');
+                
+                // Primeiro, vamos verificar quais colunas existem na tabela
+                const { data: existingData, error: testError } = await supabase
+                    .from('sounds')
+                    .select('*')
+                    .limit(1);
+                
+                if (testError) {
+                    console.log("Erro ao verificar estrutura da tabela:", testError);
+                }
+                
+                // Inserir dados básicos que sabemos que existem
+                const insertData = {
+                    title: soundData.title,
+                    description: soundData.description,
+                    lat: soundData.lat,
+                    lng: soundData.lng,
+                    audio_url: publicUrl,
+                    created_at: new Date().toISOString()
+                };
+                
+                console.log("Tentando inserir:", insertData);
+                
                 const { data, error } = await supabase
                     .from('sounds')
-                    .insert([
-                        {
-                            title: soundData.title,
-                            description: soundData.description,
-                            lat: soundData.lat,
-                            lng: soundData.lng,
-                            audio_url: publicUrl,
-                            audio_format: audioBlob.type,
-                            file_name: fileName,
-                            created_at: new Date().toISOString()
-                        }
-                    ])
+                    .insert([insertData])
                     .select();
                 
                 if (error) {
                     console.error("Erro ao salvar metadados:", error);
                     
-                    // Verificar se é erro de RLS (Row Level Security)
-                    if (error.code === '42501') {
-                        throw new Error('Permissão negada. Verifique as políticas RLS no Supabase.');
+                    // Se ainda der erro, tentar inserção mínima
+                    if (error.message.includes('column')) {
+                        console.log("Tentando inserção mínima...");
+                        const minimalData = {
+                            title: soundData.title,
+                            lat: soundData.lat,
+                            lng: soundData.lng,
+                            audio_url: publicUrl
+                        };
+                        
+                        const { data: minimalInsert, error: minimalError } = await supabase
+                            .from('sounds')
+                            .insert([minimalData])
+                            .select();
+                            
+                        if (minimalError) {
+                            throw new Error(`Inserção mínima falhou: ${minimalError.message}`);
+                        }
+                    } else {
+                        throw new Error(`Banco de dados: ${error.message}`);
                     }
-                    
-                    throw new Error(`Banco de dados: ${error.message}`);
                 }
                 
-                console.log("Metadados salvos com sucesso:", data);
+                console.log("Metadados salvos com sucesso");
                 
-                // 6. Adicionar ao mapa
+                // Adicionar ao mapa
                 addSoundToMap({
                     lat: soundData.lat,
                     lng: soundData.lng,
@@ -1116,22 +1055,12 @@
                     audio_url: publicUrl
                 });
                 
-                // 7. Limpar os chunks de áudio para a próxima gravação
-                audioChunks = [];
-                
                 showStatus('Áudio adicionado com sucesso!', 'success');
-                setTimeout(() => {
-                    document.getElementById('statusMessage').style.display = 'none';
-                }, 3000);
-                
                 return true;
                 
             } catch (error) {
                 console.error("Erro ao salvar som: ", error);
                 showStatus('Erro: ' + error.message, 'error');
-                setTimeout(() => {
-                    document.getElementById('statusMessage').style.display = 'none';
-                }, 5000);
                 return false;
             }
         }
@@ -1163,53 +1092,6 @@
             }
         }
         
-        // Função para testar a conexão e permissões
-        async function testSupabaseConnection() {
-            try {
-                showStatus('Testando conexão...', 'loading');
-                
-                const { data: tableData, error: tableError } = await supabase
-                    .from('sounds')
-                    .select('count')
-                    .limit(1);
-                
-                const { data: storageData, error: storageError } = await supabase.storage
-                    .from('sounds')
-                    .list();
-                
-                if (tableError || storageError) {
-                    console.error("Erro de conexão:", tableError || storageError);
-                    
-                    let errorMessage = "Problema de conexão: ";
-                    if (tableError?.code === '42501') {
-                        errorMessage += "Sem permissão para acessar a tabela. Configure as políticas RLS.";
-                    } else if (storageError?.message?.includes('bucket')) {
-                        errorMessage += "Bucket 'sounds' não encontrado. Crie o bucket no Storage.";
-                    } else {
-                        errorMessage += (tableError?.message || storageError?.message);
-                    }
-                    
-                    showStatus(errorMessage, 'error');
-                    return false;
-                }
-                
-                console.log("Conexão com Supabase bem-sucedida!");
-                showStatus("Conectado ao banco de dados", 'success');
-                setTimeout(() => {
-                    const statusElement = document.getElementById('statusMessage');
-                    if (statusElement) {
-                        statusElement.style.display = 'none';
-                    }
-                }, 3000);
-                
-                return true;
-            } catch (error) {
-                console.error("Erro ao testar conexão:", error);
-                showStatus("Erro de conexão: " + error.message, 'error');
-                return false;
-            }
-        }
-        
         // Mostrar mensagem de status
         function showStatus(message, type) {
             const statusElement = document.getElementById('statusMessage');
@@ -1223,7 +1105,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             initMap();
             initAudioRecorder();
-            testSupabaseConnection();
             
             document.getElementById('recordBtn').addEventListener('click', toggleRecording);
             
@@ -1232,19 +1113,6 @@
                     document.getElementById('infoModal').style.display = 'none';
                 }
             });
-
-            // Log de informações do navegador para debug
-            console.log("User Agent:", navigator.userAgent);
-            console.log("Dispositivo Apple:", isAppleDevice());
-            console.log("MediaRecorder suportado:", typeof MediaRecorder !== 'undefined');
-            if (typeof MediaRecorder !== 'undefined') {
-                console.log("Formatos suportados:", {
-                    'audio/webm': MediaRecorder.isTypeSupported('audio/webm'),
-                    'audio/webm;codecs=opus': MediaRecorder.isTypeSupported('audio/webm;codecs=opus'),
-                    'audio/mp4': MediaRecorder.isTypeSupported('audio/mp4'),
-                    'audio/mpeg': MediaRecorder.isTypeSupported('audio/mpeg')
-                });
-            }
         });
     </script>
 </body>
